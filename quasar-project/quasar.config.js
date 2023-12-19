@@ -12,7 +12,8 @@
 const { configure } = require('quasar/wrappers');
 
 
-module.exports = configure(function (/* ctx */) {
+module.exports = configure(function (ctx) {
+  require('dotenv').config()
   return {
     eslint: {
       // fix: true,
@@ -60,7 +61,7 @@ module.exports = configure(function (/* ctx */) {
         node: 'node16'
       },
 
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -69,7 +70,16 @@ module.exports = configure(function (/* ctx */) {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: {
+        DB_USER: process.env.DB_USER,
+        DB_PWD: process.env.DB_PWD,
+        DB_NAME: process.env.DB_NAME,
+        DB_HOST: process.env.DB_HOST,
+        DB_PORT: process.env.DB_PORT,
+        JWT_SECRET: process.env.JWT_SECRET,
+        APP_URL: process.env.APP_URL,
+        API_URL: process.env.API_URL,
+      },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
@@ -106,7 +116,7 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: ['Notify', 'Dialog'],
     },
 
     // animations: 'all', // --- includes all animations

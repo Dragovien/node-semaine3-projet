@@ -1,80 +1,104 @@
-const busboy = require('busboy')
 const db = require("./models/db.js")
-const express = require("express")
-const fileUpload = require('express-fileupload')
+const dotenv = require('dotenv')
 const bodyParser = require("body-parser")
 const cors = require("cors")
-// const devUtils = require('./utils/dev.utils.js')
-const app = express()
-
-console.log('Launch database synchronisation.')
-
-db.sync({
-    alter: true,
-    force: false
-}).then(async () => {
-    console.log('Database synchronised.')
-})
-
-var fileUploadOptions = {
-    createParentPath: true
-}
+const devUtils = require('./utils/dev.utils.js')
+dotenv.config()
+const mysql = require('mysql2/promise');
+const dbConfig = require("./models/db.config.js");
+const express = require("express")
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const SessionStore = require('express-session-sequelize')(session.Store);
 
 
-app.use(fileUpload(fileUploadOptions))
-app.use(cors(corsOptions))
-
-app.use(bodyParser.json({
-    limit: '20mb'
-}))
-
-app.use(bodyParser.urlencoded({
-    extended: true
-}))
-
-// Global middleware to conditionally apply busboy
-app.use((req, res, next) => {
-    if (req.headers['Content-Type'] && req.headers['Content-Type'].includes('multipart/form-data')) {
-        // Busboy need to have a lower case content-type
-        req.headers['content-type'] = req.headers['Content-Type']
-        return busboy()(req, res, next)
-    } else {
-        // Continue to the next middleware if Content-Type is missing or invalid
-        return next()
+mysql.createConnection({
+    user: dbConfig.USER,
+    password: dbConfig.PASSWORD
+}).then(async (connection) => {
+    try {
+        // await connection.query(`DROP DATABASE IF EXISTS ${dbConfig.DB}`);
+        await connection.query(`CREATE DATABASE IF NOT EXISTS ${dbConfig.DB}`);
+    } catch (error) {
+        console.error('Error executing query:', error);
+    } finally {
+        connection.end();
     }
-})
+}).then(() => {
+    console.log('Launch database synchronisation.')
+    db.sync({
+        alter: true,
+        force: false
+    }).then(async () => {
+        console.log('Database synchronised.')
+        const existingAdmin = await db.models.User.findOne({ where: { isAdmin: true } })
+        if (!existingAdmin) {
+            devUtils.init()
+        }
+    })
 
-app.get("/", (req, res) => {
-    return res.json({
-        message: "Welcome to node-semaine3-project api."
+    const sequelizeSessionStore = new SessionStore({
+        db: db,
+    });
+
+
+    const app = express()
+    app.use(cookieParser());
+
+    app.use(cors({
+        origin: [process.env.APP_URL, process.env.API_URL],
+        credentials: true,
+        withCredentials: true
+    }));
+
+    app.use(express.urlencoded({ extended: false }));
+
+
+    app.use(session({
+        name: 'Session',
+        secret: process.env.SECRET,
+        store: sequelizeSessionStore,
+        resave: false,
+        saveUninitialized: false,
+    }))
+
+    app.use(bodyParser.json())
+
+    app.get("/", (req, res) => {
+        return res.json({
+            message: "Welcome to node-semaine3-project api."
+        })
+    })
+
+    app.get("*", (req, res, next) => {
+        console.log('GET ' + req.url)
+        next()
+    })
+
+    app.post("*", (req, res, next) => {
+        console.log('POST ' + req.url)
+        next()
+    })
+
+    app.put("*", (req, res, next) => {
+        console.log('PUT ' + req.url)
+        next()
+    })
+
+    app.delete("*", (req, res, next) => {
+        console.log('DELETE ' + req.url)
+        next()
+    })
+
+    require("fs").readdirSync(require("path").join(__dirname, "routes")).forEach(function (file) {
+        require("./routes/" + file)(app)
+    })
+
+    const PORT = process.env.PORT || 5000
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}.`)
     })
 })
-
-app.get("*", (req, res, next) => {
-    console.log('GET ' + req.url)
-    next()
-})
-
-app.post("*", (req, res, next) => {
-    console.log('POST ' + req.url)
-    next()
-})
-
-app.put("*", (req, res, next) => {
-    console.log('PUT ' + req.url)
-    next()
-})
-
-app.delete("*", (req, res, next) => {
-    console.log('DELETE ' + req.url)
-    next()
-})
-
-require("fs").readdirSync(require("path").join(__dirname, "routes")).forEach(function (file) {
-    require("./routes/" + file)(app)
-})
-
-const PORT = process.env.PORT || 5000
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`)
-})
+    .catch(err => {
+        console.error('Error connecting to MySQL:', err);
+    });

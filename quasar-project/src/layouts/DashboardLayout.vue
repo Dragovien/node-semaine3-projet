@@ -1,24 +1,41 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="lHh Lpr lff">
     <q-header elevated>
       <q-toolbar>
-        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
+        <q-btn
+          flat
+          dense
+          round
+          icon="menu"
+          aria-label="Menu"
+          @click="toggleLeftDrawer"
+        />
 
         <q-toolbar-title>
-          Au beaux meubles
+          Quasar App
         </q-toolbar-title>
 
         <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" bordered>
+    <q-drawer
+      bordered
+      v-model="leftDrawerOpen"
+      show-if-above
+    >
       <q-list>
-        <q-item-label header>
-          Navigation
+        <q-item-label
+          header
+        >
+          Dashboard
         </q-item-label>
 
-        <EssentialLink v-for="link in essentialLinks" :key="link.title" v-bind="link" />
+        <EssentialLink
+          v-for="link in essentialLinks"
+          :key="link.title"
+          v-bind="link"
+        />
       </q-list>
     </q-drawer>
 
@@ -30,26 +47,26 @@
 
 <script>
 import { defineComponent} from 'vue'
-import EssentialLink from 'src/components/EssentialLink.vue'
+import EssentialLink from 'components/EssentialLink.vue'
 
 export default defineComponent({
-  name: 'MainLayout',
+  name: 'DashboardLayout',
   data() {
     return {
       essentialLinks: [
       {
         title: 'Produits',
-        icon: 'inventory',
+        icon: 'school',
         link: '/'
       },
       {
         title: 'Login',
-        icon: 'login',
+        icon: 'code',
         link: '/login'
       },
       {
         title: 'Dashboard',
-        icon: 'dashboard',
+        icon: 'code',
         link: '/dashboard'
       },
     ],
