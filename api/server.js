@@ -7,7 +7,6 @@ dotenv.config()
 const mysql = require('mysql2/promise');
 const dbConfig = require("./models/db.config.js");
 const express = require("express")
-const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const SessionStore = require('express-session-sequelize')(session.Store);
 
@@ -44,7 +43,6 @@ mysql.createConnection({
 
 
     const app = express()
-    app.use(cookieParser());
 
     app.use(cors({
         origin: [process.env.APP_URL, process.env.API_URL],

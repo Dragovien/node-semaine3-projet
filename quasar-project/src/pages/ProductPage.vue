@@ -40,7 +40,7 @@
                       <div class="materials itemProperty">
                         Matériau(x):
                         <div>
-                          <q-chip clickable ripple v-for="material in wardrobe.Materials" :key="material">{{ material.name
+                          <q-chip clickable ripple v-for="material in wardrobe.Materials" :key="material" @click="showDetails(material)">{{ material.name
                           }}</q-chip>
                         </div>
                       </div>
@@ -68,7 +68,7 @@
                       <div class="materials itemProperty">
                         Matériau(x):
                         <div>
-                          <q-chip v-for="material in shelve.Materials" :key="material">{{ material.name }}</q-chip>
+                          <q-chip v-for="material in shelve.Materials" :key="material" clickable ripple @click="showDetails(material)">{{ material.name }}</q-chip>
                         </div>
 
                       </div>
@@ -287,6 +287,21 @@ export default defineComponent({
           position: 'top'
         })
       }
+    },
+
+    showDetails(material) {
+      let message = material.description + ' ' + `
+      La compagnie qui nous fournit ce matériau est ${material.company}.`
+
+      // possibilité de remplacer par custom component pour plus d'options de style
+      
+      this.$q.dialog({
+        title: material.name,
+        message: message,
+        ok: {
+          push: true
+        },
+      })
     }
   },
   async created() {
