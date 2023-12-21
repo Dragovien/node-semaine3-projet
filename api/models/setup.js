@@ -5,21 +5,25 @@ function applyRelations(sequelize) {
 
     User.hasMany(Product, {
         foreignKey: 'user_id',
+        source: 'id',
     })
 
     //#endregion
 
     //#region Product Relations
 
-    Product.belongsTo(Material, { through: 'material_used' })
+    Product.belongsToMany(Material, { through: 'product_material', foreignKey: 'product_id' })
 
-    Product.belongsTo(User)
+    Product.belongsTo(User, {
+        foreignKey: 'user_id',
+        target: 'id',
+    })
 
     //#endregion
 
     //#region Material Relations
 
-    Material.belongsTo(Product, { through: 'material_used' })
+    Material.belongsToMany(Product, { through: 'product_material', foreignKey: 'material_name' })
 
     //#endregion
 

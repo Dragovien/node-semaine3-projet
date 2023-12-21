@@ -14,11 +14,12 @@ const SessionStore = require('express-session-sequelize')(session.Store);
 
 mysql.createConnection({
     user: dbConfig.USER,
-    password: dbConfig.PASSWORD
+    password: dbConfig.PASSWORD,
 }).then(async (connection) => {
     try {
         // await connection.query(`DROP DATABASE IF EXISTS ${dbConfig.DB}`);
-        await connection.query(`CREATE DATABASE IF NOT EXISTS ${dbConfig.DB}`);
+        await connection.query(`CREATE DATABASE IF NOT EXISTS ${dbConfig.DB} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
+        
     } catch (error) {
         console.error('Error executing query:', error);
     } finally {
@@ -28,7 +29,7 @@ mysql.createConnection({
     console.log('Launch database synchronisation.')
     db.sync({
         alter: true,
-        force: false
+        force: false,
     }).then(async () => {
         console.log('Database synchronised.')
         const existingAdmin = await db.models.User.findOne({ where: { isAdmin: true } })

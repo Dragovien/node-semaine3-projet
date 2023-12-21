@@ -40,7 +40,9 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <q-page class="flex page">
+        <router-view />
+      </q-page>
     </q-page-container>
   </q-layout>
 </template>
@@ -56,17 +58,17 @@ export default defineComponent({
       essentialLinks: [
       {
         title: 'Produits',
-        icon: 'school',
-        link: '/'
+        icon: 'inventory',
+        link: '/dashboard/products'
       },
       {
         title: 'Login',
-        icon: 'code',
+        icon: 'login',
         link: '/login'
       },
       {
         title: 'Dashboard',
-        icon: 'code',
+        icon: 'dashboard',
         link: '/dashboard'
       },
     ],
@@ -83,3 +85,11 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="sass" scoped>
+.page
+  flex-direction: column
+  align-items: center
+  width: 100%
+  height: 100%
+</style>
