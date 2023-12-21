@@ -8,7 +8,8 @@
           Au beaux meubles
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn size="sm" round color="black" text-color="white" icon="login" @click="$router.push('/login')">
+        </q-btn>
       </q-toolbar>
     </q-header>
 

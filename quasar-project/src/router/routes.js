@@ -22,8 +22,7 @@ const routes = [
         next('/login')
       }
       } catch (error) {
-        // console.error(error);
-        // Handle other errors if needed
+        console.error(error);
         next('/login');
       }
       
@@ -31,6 +30,8 @@ const routes = [
     children: [
       { path: '', name:'DashboardPage', component: () => import('pages/DashboardPage.vue') },
       { path: 'products', name:'AdminProductPage', component: () => import('pages/ProductPage.vue'),  props: { admin: true } },
+      { path: 'manageAccounts', name:'ManageAccountPage', component: () => import('pages/ManageAccountPage.vue') },
+
     ]
   },
 

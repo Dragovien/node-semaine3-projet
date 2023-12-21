@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md productPageCard">
+  <div class="q-pa-md productPage">
     <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify">
       <q-tab class="outerTab" name="products" label="Produits"
         :disable="admin && $route.name === 'AdminProductPage' ? null : true" />
@@ -296,7 +296,7 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-.productPageCard
+.productPage
   min-width: 800px
   width: 100%
   max-width: 90%

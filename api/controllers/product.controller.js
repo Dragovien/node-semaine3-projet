@@ -71,14 +71,14 @@ exports.delete = async (req, res, next) => {
     })
 
     if(!user) {
-      return res.status(403).json({ message: "Must be admin to create product", product });
+      return res.status(403).json({ message: "Must be admin to create product"});
     }
 
     if(product) {
       await product.destroy()
     }
 
-    return res.status(200).json({ message: "Product deleted successfully", product });
+    return res.status(200).json({ message: "Product deleted successfully"});
 
   } catch (error) {
     console.log(error)
