@@ -3,21 +3,11 @@ function applyRelations(sequelize) {
 
     //#region User Relations
 
-    User.hasMany(Product, {
-        foreignKey: 'user_id',
-        source: 'id',
-    })
-
     //#endregion
 
     //#region Product Relations
 
-    Product.belongsToMany(Material, { through: 'product_material', foreignKey: 'product_id' })
-
-    Product.belongsTo(User, {
-        foreignKey: 'user_id',
-        target: 'id',
-    })
+    Product.belongsToMany(Material, { through: 'product_material', foreignKey: 'product_id', onDelete: 'CASCADE' })
 
     //#endregion
 

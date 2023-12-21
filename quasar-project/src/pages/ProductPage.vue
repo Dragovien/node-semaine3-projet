@@ -1,7 +1,8 @@
 <template>
   <div class="q-pa-md productPageCard">
     <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify">
-      <q-tab class="outerTab" name="products" label="Produits" :disable="admin && $route.name === 'AdminProductPage' ? null : true" />
+      <q-tab class="outerTab" name="products" label="Produits"
+        :disable="admin && $route.name === 'AdminProductPage' ? null : true" />
       <q-tab class="outerTab" name="addProduct" label="Ajouter un produit"
         v-if="admin && $route.name === 'AdminProductPage'" />
     </q-tabs>
@@ -29,21 +30,22 @@
                 <div class="itemCardWrapper" v-if="wardrobes.length > 0">
                   <q-card class="itemCard" v-for="wardrobe in wardrobes" :key="wardrobe">
                     <q-card-section class="closeCard">
-                      <q-btn push color="red" size="10px" round icon="close" @click="deleteProduct(wardrobe)" v-if="admin && $route.name === 'AdminProductPage'"></q-btn>
+                      <q-btn push color="red" size="10px" round icon="close" @click="deleteProduct(wardrobe)"
+                        v-if="admin && $route.name === 'AdminProductPage'"></q-btn>
                     </q-card-section>
                     <q-card-section>
-                      <p class="text-center">Nom: {{ wardrobe.name }}</p>
+                      <p class="text-center text-h6">Nom: {{ wardrobe.name }}</p>
                     </q-card-section>
                     <q-card-section>
-                      <div class="flex materials itemProperty">
-                        Matériaux:
-                        <p v-for="material in wardrobe.Materials" :key="material">{{ material.name }}</p>
+                      <div class="materials itemProperty">
+                        Matériau(x):
+                        <div>
+                          <q-chip clickable ripple v-for="material in wardrobe.Materials" :key="material">{{ material.name
+                          }}</q-chip>
+                        </div>
                       </div>
                       <div class="itemProperty">
                         Prix: {{ wardrobe.price }} €
-                      </div>
-                      <div class="itemProperty">
-                        Créateur: {{ wardrobe.User.first_name }} {{ wardrobe.User.last_name }}
                       </div>
                     </q-card-section>
                   </q-card>
@@ -56,21 +58,22 @@
                 <div class="itemCardWrapper" v-if="wardrobes.length > 0">
                   <q-card class="itemCard" v-for="shelve in shelves" :key="shelve">
                     <q-card-section class="closeCard">
-                      <q-btn push color="red" size="10px" round icon="close" @click="deleteProduct(shelve)" v-if="admin && $route.name === 'AdminProductPage'"></q-btn>
+                      <q-btn push color="red" size="10px" round icon="close" @click="deleteProduct(shelve)"
+                        v-if="admin && $route.name === 'AdminProductPage'"></q-btn>
                     </q-card-section>
                     <q-card-section>
-                      <p class="text-center">Nom: {{ shelve.name }}</p>
+                      <p class="text-center text-h6">Nom: {{ shelve.name }}</p>
                     </q-card-section>
                     <q-card-section>
-                      <div class="flex materials itemProperty">
-                        Matériaux:
-                        <p v-for="material in shelve.Materials" :key="material">{{ material.name }}</p>
+                      <div class="materials itemProperty">
+                        Matériau(x):
+                        <div>
+                          <q-chip v-for="material in shelve.Materials" :key="material">{{ material.name }}</q-chip>
+                        </div>
+
                       </div>
                       <div class="itemProperty">
                         Prix: {{ shelve.price }} €
-                      </div>
-                      <div class="itemProperty">
-                        Créateur: {{ shelve.User.first_name }} {{ shelve.User.last_name }}
                       </div>
                     </q-card-section>
                   </q-card>
@@ -97,7 +100,7 @@
             label="Catégorie du produit" />
 
           <q-input class="priceInput" mask="#.##" fill-mask="#" reverse-fill-mask standout v-model="price"
-            label="Prix du produit" lazy-rules :rules="[val => val && val.length > 0 || 'Veuillez remplir ce champ']"
+            label="Prix du produit" lazy-rules :rules="[val => val && val.length > 0 && !isNaN(val) || 'Veuillez remplir ce champ']"
             ref="priceInput">
             <template v-slot:append>
               <div>
@@ -211,8 +214,8 @@ export default defineComponent({
           this.ticked = []
           this.category = []
           this.name = null,
-            this.price = null,
-            this.$refs.nameInput.resetValidation()
+          this.price = null,
+          this.$refs.nameInput.resetValidation()
           this.$refs.priceInput.resetValidation()
           this.getProducts()
 
@@ -338,6 +341,8 @@ export default defineComponent({
   column-gap: 2rem
   row-gap: 2rem
   flex-wrap: wrap
+  padding-bottom: 2rem
+
 
 .itemCard
   width: 40%
@@ -349,10 +354,13 @@ export default defineComponent({
 
 .materials
   display: flex
+  align-items: center
   column-gap: 1rem
+  flex-wrap: wrap
 
 .itemProperty
   margin-bottom: 1rem
+  
 
 .categorySelect
   margin-bottom: 2rem

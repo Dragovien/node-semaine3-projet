@@ -22,10 +22,6 @@ module.exports = (sequelize, DataTypes) => sequelize.define(
     type: DataTypes.FLOAT,
     allowNull: false,
   },
-  user_id: {
-    type: DataTypes.UUID,
-    allowNull: false
-  }
 },
   {
     timestamps: true,

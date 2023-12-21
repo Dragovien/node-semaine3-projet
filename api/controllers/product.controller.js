@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken')
 exports.getAll = async (req, res) => {
   try {
     let products = await Product.findAll({include: [
-      {model: User, attributes: ['first_name', 'last_name']},
       {model: Material}
     ]})
     if(products) {
@@ -27,17 +26,19 @@ exports.create = async (req, res, next) => {
     const user = await User.findOne({
       where: {
         id: decoded.userId,
-        email: decoded.email
+        email: decoded.email,
+        isAdmin: true
       }
     })
 
-    console.log('Price', price)
+    if(!user) {
+      return res.status(403).json({ message: "Must be admin to create product", product });
+    }
 
     let product = await Product.create({
       name: name,
       category: category,
       material: {materialArray: material},
-      user_id: user.id,
       price: parseFloat(price)
     })
 
@@ -59,7 +60,19 @@ exports.delete = async (req, res, next) => {
 
     let product = await Product.findByPk(id)
 
-    console.log(product)
+    const decoded = jwt.verify(req.sessionStore.token, process.env.JWT_SECRET);
+
+    const user = await User.findOne({
+      where: {
+        id: decoded.userId,
+        email: decoded.email,
+        isAdmin: true
+      }
+    })
+
+    if(!user) {
+      return res.status(403).json({ message: "Must be admin to create product", product });
+    }
 
     if(product) {
       await product.destroy()
