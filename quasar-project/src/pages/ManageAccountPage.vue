@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md manageAccountPage">
+  <div class="q-pa-md manageAccountWrapper">
     <q-card class="userListCard">
       <q-card-section>
         <p class="text-h5 text-center">Liste des utilisateurs</p>
@@ -175,7 +175,7 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-.manageAccountPage
+.manageAccountWrapper
   width: 100%
   display: flex
   column-gap: 1rem

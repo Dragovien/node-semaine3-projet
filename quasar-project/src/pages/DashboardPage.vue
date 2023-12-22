@@ -1,7 +1,15 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md dashboardWrapper">
     <p class="text-h3 text-center">Dashboard</p>
-    <q-btn color="blue">Ajouter des statistiques</q-btn>
+    <q-btn class="addStatBtn" color="blue">Ajouter des statistiques</q-btn>
+    <div class="statCardWrapper">
+      <q-card>
+        <q-card-section>
+          
+        </q-card-section>
+      </q-card>
+
+    </div>
   </div>
 </template>
 
@@ -71,5 +79,20 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
+.dashboardWrapper
+  width: 100%
+  flex: 1
+  display: flex
+  flex-direction: column
+  justify-content: center
+  row-gap: 2rem
+
+.addStatBtn
+  max-width: 200px
+  align-self: flex-end
+
+.statCardWrapper
+  flex: 1
+
 
 </style>

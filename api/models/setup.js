@@ -1,9 +1,5 @@
 function applyRelations(sequelize) {
-    const { User, Product, Material } = sequelize.models
-
-    //#region User Relations
-
-    //#endregion
+    const { Product, Material } = sequelize.models
 
     //#region Product Relations
 

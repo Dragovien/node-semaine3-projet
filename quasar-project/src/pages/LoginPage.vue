@@ -1,5 +1,4 @@
 <template>
-  <q-page class="flex flex-center">
     <q-card class="loginCard">
       <q-card-section>
         <div class="text-h5 text-center">Se connecter</div>
@@ -22,7 +21,6 @@
         </q-form>
       </q-card-section>
     </q-card>
-  </q-page>
 </template>
 
 <script>
